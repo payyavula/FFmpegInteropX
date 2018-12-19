@@ -31,6 +31,7 @@
 #include <mfapi.h>
 #include <dshow.h>
 #include "LanguageTagConverter.h"
+#include "FFmpegVersionInfo.h"
 
 extern "C"
 {
@@ -67,6 +68,7 @@ FFmpegInteropMSS::FFmpegInteropMSS(FFmpegInteropConfig^ interopConfig)
 		{
 			LanguageTagConverter::Initialize();
 			isRegistered = true;
+			FFmpegVersionInfo::CheckMinimumVersion();
 		}
 		isRegisteredMutex.unlock();
 	}
@@ -125,10 +127,6 @@ IAsyncOperation<FFmpegInteropMSS^>^ FFmpegInteropMSS::CreateFromStreamAsync(IRan
 		return result;
 	});
 };
-
-
-
-
 
 IAsyncOperation<FFmpegInteropMSS^>^ FFmpegInteropMSS::CreateFromUriAsync(String^ uri, FFmpegInteropConfig^ config)
 {
@@ -1274,4 +1272,5 @@ static int64_t FileStreamSeek(void* ptr, int64_t pos, int whence)
 		return out.QuadPart; // Return the new position:
 	}
 }
+
 

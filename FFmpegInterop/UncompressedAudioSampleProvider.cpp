@@ -163,9 +163,9 @@ UncompressedAudioSampleProvider::~UncompressedAudioSampleProvider()
 HRESULT UncompressedAudioSampleProvider::CreateBufferFromFrame(IBuffer^* pBuffer, AVFrame* avFrame, int64_t& framePts, int64_t& frameDuration)
 {
 	HRESULT hr = S_OK;
-	
+
 	hr = CheckFormatChanged(avFrame);
-	
+
 	if (SUCCEEDED(hr))
 	{
 		if (m_pSwrCtx)
