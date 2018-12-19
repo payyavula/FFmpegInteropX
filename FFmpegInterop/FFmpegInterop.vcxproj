@@ -163,7 +163,7 @@
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>FFmpegUniversal.lib;shcore.lib;runtimeobject.lib;mfuuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <AdditionalLibraryDirectories>$(SolutionDir)FFmpegUniversal\Output\FFmpegUniversal\$(PlatformTarget)\Redist;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)FFmpegUniversal\Output\FFmpegUniversal\$(PlatformTarget)\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Xdcmake>
       <DocumentLibraryDependencies>false</DocumentLibraryDependencies>
@@ -185,7 +185,7 @@
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>FFmpegUniversal.lib;shcore.lib;runtimeobject.lib;mfuuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <AdditionalLibraryDirectories>$(SolutionDir)FFmpegUniversal\Output\FFmpegUniversal\$(PlatformTarget)\Redist;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)FFmpegUniversal\Output\FFmpegUniversal\$(PlatformTarget)\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Xdcmake>
       <DocumentLibraryDependencies>false</DocumentLibraryDependencies>
@@ -207,7 +207,7 @@
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>FFmpegUniversal.lib;shcore.lib;runtimeobject.lib;mfuuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <AdditionalLibraryDirectories>$(SolutionDir)FFmpegUniversal\Output\FFmpegUniversal\$(PlatformTarget)\Redist;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)FFmpegUniversal\Output\FFmpegUniversal\$(PlatformTarget)\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Xdcmake>
       <DocumentLibraryDependencies>false</DocumentLibraryDependencies>
@@ -229,7 +229,7 @@
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>FFmpegUniversal.lib;shcore.lib;runtimeobject.lib;mfuuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <AdditionalLibraryDirectories>$(SolutionDir)FFmpegUniversal\Output\FFmpegUniversal\$(PlatformTarget)\Redist;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)FFmpegUniversal\Output\FFmpegUniversal\$(PlatformTarget)\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Xdcmake>
       <DocumentLibraryDependencies>false</DocumentLibraryDependencies>
@@ -251,7 +251,7 @@
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>FFmpegUniversal.lib;shcore.lib;runtimeobject.lib;mfuuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <AdditionalLibraryDirectories>$(SolutionDir)FFmpegUniversal\Output\FFmpegUniversal\$(PlatformTarget)\Redist;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)FFmpegUniversal\Output\FFmpegUniversal\$(PlatformTarget)\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Xdcmake>
       <DocumentLibraryDependencies>false</DocumentLibraryDependencies>
@@ -273,7 +273,7 @@
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>FFmpegUniversal.lib;shcore.lib;runtimeobject.lib;mfuuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <AdditionalLibraryDirectories>$(SolutionDir)FFmpegUniversal\Output\FFmpegUniversal\$(PlatformTarget)\Redist;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)FFmpegUniversal\Output\FFmpegUniversal\$(PlatformTarget)\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Xdcmake>
       <DocumentLibraryDependencies>false</DocumentLibraryDependencies>
@@ -295,7 +295,7 @@
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>FFmpegUniversal.lib;shcore.lib;runtimeobject.lib;mfuuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <AdditionalLibraryDirectories>$(SolutionDir)FFmpegUniversal\Output\FFmpegUniversal\$(PlatformTarget)\Redist;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)FFmpegUniversal\Output\FFmpegUniversal\$(PlatformTarget)\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Xdcmake>
       <DocumentLibraryDependencies>false</DocumentLibraryDependencies>
@@ -317,7 +317,7 @@
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>FFmpegUniversal.lib;shcore.lib;runtimeobject.lib;mfuuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <AdditionalLibraryDirectories>$(SolutionDir)FFmpegUniversal\Output\FFmpegUniversal\$(PlatformTarget)\Redist;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)FFmpegUniversal\Output\FFmpegUniversal\$(PlatformTarget)\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Xdcmake>
       <DocumentLibraryDependencies>false</DocumentLibraryDependencies>
