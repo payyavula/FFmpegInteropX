@@ -85,7 +85,6 @@ if [ "$1" == "Win10" ]; then
         --arch=arm \
         --as=armasm \
         --cpu=armv7 \
-        --enable-thumb \
         --enable-shared \
         --enable-cross-compile \
         --enable-debug \
@@ -109,25 +108,18 @@ if [ "$1" == "Win10" ]; then
         cd Output/Windows10/ARM64
         ../../../configure \
         --toolchain=msvc \
-        --disable-programs \
-        --disable-d3d11va \
-        --disable-dxva2 \
-		--disable-encoders \
-		--disable-devices \
-		--disable-hwaccels \
-        --disable-doc \
         --arch=arm64 \
-        --cpu=armv7 \
-        --enable-thumb \
+        --as=armasm64 \
+        --cpu=armv8 \
         --enable-shared \
         --enable-cross-compile \
         --enable-debug \
-        --enable-zlib \
-        --enable-bzlib \
-        --enable-iconv \
+        --disable-zlib \
+        --disable-bzlib \
+        --disable-iconv \
         --target-os=win32 \
-        --extra-cflags="-MD -DWINAPI_FAMILY=WINAPI_FAMILY_APP -D_WIN32_WINNT=0x0A00 -D__ARM_PCS_VFP" \
-        --extra-ldflags="-APPCONTAINER WindowsApp.lib" \
+        --extra-cflags="-MD -DWINAPI_FAMILY=WINAPI_FAMILY_DESKTOP_APP -D_WIN32_WINNT=0x0A00 -D__ARM_PCS_VFP" \
+        --extra-ldflags="kernel32.lib" \
         --prefix=../../../Build/Windows10/ARM64
         make -j8
         make install

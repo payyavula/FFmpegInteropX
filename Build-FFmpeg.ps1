@@ -69,7 +69,7 @@ function Build-Platform {
      # Load environment from VCVARS.
     $vcvarsArch = $vcvarsArchs[$env:PROCESSOR_ARCHITECTURE][$Platform]
 
-    CMD /c "`"$VsLatestPath\VC\Auxiliary\Build\vcvarsall.bat`" $vcvarsArch uwp $WindowsTargetPlatformVersion -vcvars_ver=$VcVersion && SET" | . {
+    CMD /c "`"$VsLatestPath\VC\Auxiliary\Build\vcvarsall.bat`" $vcvarsArch -vcvars_ver=$VcVersion && SET" | . {
         PROCESS {
             if ($_ -match '^([^=]+)=(.*)') {
                 if ($Matches[1] -notin 'HOME') {
