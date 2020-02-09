@@ -32,6 +32,7 @@
 #include <dshow.h>
 #include "LanguageTagConverter.h"
 #include "FFmpegVersionInfo.h"
+#include "TaskHelpers.h"
 #include "collection.h"
 #include <ppl.h>
 
@@ -510,6 +511,11 @@ bool FFmpegInteropMSS::CheckUseHardwareAcceleration(AVCodecContext* avCodecCtx, 
 	}
 
 	return result;
+}
+
+bool FFmpegInteropMSS::IsNearCurrentPlaybackPosition(TimeSpan position)
+{
+	return abs(lastRenderPosition.Duration - position.Duration) < 10000000;
 }
 
 
@@ -1502,8 +1508,20 @@ void FFmpegInteropMSS::OnStarting(MediaStreamSource^ sender, MediaStreamSourceSt
 {
 	MediaStreamSourceStartingRequest^ request = args->Request;
 
-	// Perform seek operation when MediaStreamSource received seek event from MediaElement
-	if (request->StartPosition && request->StartPosition->Value.Duration <= mediaDuration.Duration && (!isFirstSeek || request->StartPosition->Value.Duration > 0))
+	mutexGuard.lock();
+
+	if (isSwitchingVideoStream && request->StartPosition && IsNearCurrentPlaybackPosition(request->StartPosition->Value))
+	{
+		// always skip first seek before switch streams
+		request->SetActualStartPosition(request->StartPosition->Value);
+	}
+	else if (isFirstSeekAfterSwitchingVideoStream && request->StartPosition && 
+		IsNearCurrentPlaybackPosition(request->StartPosition->Value) && mss->BufferTime.Duration <= 10000000)
+	{
+		// second seek can only be skipped with zero buffer time
+		request->SetActualStartPosition(request->StartPosition->Value);
+	}
+	else if (request->StartPosition && request->StartPosition->Value.Duration <= mediaDuration.Duration && (!isFirstSeek || request->StartPosition->Value.Duration > 0))
 	{
 		auto hr = Seek(request->StartPosition->Value);
 		if (SUCCEEDED(hr))
@@ -1523,6 +1541,9 @@ void FFmpegInteropMSS::OnStarting(MediaStreamSource^ sender, MediaStreamSourceSt
 	}
 
 	isFirstSeek = false;
+	isFirstSeekAfterSwitchingVideoStream = false;
+
+	mutexGuard.unlock();
 }
 
 void FFmpegInteropMSS::OnSampleRequested(Windows::Media::Core::MediaStreamSource^ sender, MediaStreamSourceSampleRequestedEventArgs^ args)
@@ -1533,10 +1554,24 @@ void FFmpegInteropMSS::OnSampleRequested(Windows::Media::Core::MediaStreamSource
 		if (currentAudioStream && args->Request->StreamDescriptor == currentAudioStream->StreamDescriptor)
 		{
 			args->Request->Sample = currentAudioStream->GetNextSample();
+
+			if (!currentVideoStream && args->Request->Sample)
+			{
+				args->Request->Sample->Processed += ref new Windows::Foundation::TypedEventHandler<Windows::Media::Core::MediaStreamSample^, Platform::Object^>(this, &FFmpegInterop::FFmpegInteropMSS::OnSampleProcessed);
+			}
 		}
 		else if (currentVideoStream && args->Request->StreamDescriptor == currentVideoStream->StreamDescriptor)
 		{
 			args->Request->Sample = currentVideoStream->GetNextSample();
+			if (isSwitchingVideoStream)
+			{
+				firstSampleAfterSwitchVideoStreamEvent.set();
+			}
+
+			if (args->Request->Sample)
+			{
+				args->Request->Sample->Processed += ref new Windows::Foundation::TypedEventHandler<Windows::Media::Core::MediaStreamSample^, Platform::Object^>(this, &FFmpegInterop::FFmpegInteropMSS::OnSampleProcessed);
+			}
 		}
 		else
 		{
@@ -1583,9 +1618,101 @@ void FFmpegInteropMSS::OnSwitchStreamsRequested(MediaStreamSource^ sender, Media
 		{
 			currentVideoStream = stream;
 			currentVideoStream->EnableStream();
+
+			if (isSwitchingVideoStream)
+			{
+				isFirstSeekAfterSwitchingVideoStream = true;
+				switchVideoStreamEvent.set();
+			}
 		}
 	}
 
+	mutexGuard.unlock();
+}
+
+IAsyncAction^ FFmpegInteropMSS::SelectVideoStreamAsync(VideoStreamInfo^ videoStream)
+{
+	return create_async([this, videoStream]()
+		{
+			switchStreamsMutex.lock();
+			mutexGuard.lock();
+			bool isMutexGuardLocked = true;
+
+			if (videoStream == CurrentVideoStream)
+			{
+				mutexGuard.unlock();
+				switchStreamsMutex.unlock();
+				return;
+			}
+
+			try
+			{
+				unsigned int index;
+				if (!videoStreamInfos->IndexOf(videoStream, &index))
+				{
+					throw ref new Exception(E_FAIL, "Video stream not found.");
+				}
+
+				if (!playbackItem)
+				{
+					CreateMediaPlaybackItem();
+				}
+
+				if (playbackItem->VideoTracks->Size != videoStreamInfos->Size)
+				{
+					throw ref new Exception(E_FAIL, "Video streams not initialized. Do not call before playback has started!");
+				}
+
+				if (index == playbackItem->VideoTracks->SelectedIndex)
+				{
+					mutexGuard.unlock();
+					switchStreamsMutex.unlock();
+					return;
+				}
+
+				isSwitchingVideoStream = true;
+				switchVideoStreamEvent = task_completion_event<void>();
+				firstSampleAfterSwitchVideoStreamEvent = task_completion_event<void>();
+				playbackItem->VideoTracks->SelectedIndex = index;
+
+				
+				mutexGuard.unlock();
+				isMutexGuardLocked = false;
+				
+				// wait for switch video streams
+				auto timeoutTask = task_delay(5000); // timeout after 5 seconds
+				auto tasks = std::vector<task<void>>({ task<void>(switchVideoStreamEvent), timeoutTask });
+				auto taskIndex = when_any(tasks.begin(), tasks.end()).get();
+				if (taskIndex != 0)
+				{
+					throw ref new Exception(E_FAIL, "Timeout while waiting for stream switch.");
+				}
+
+				// wait for sample to be parsed plus 1 more second
+				task<void>(firstSampleAfterSwitchVideoStreamEvent).wait();
+				task_delay(1000).wait();
+				isSwitchingVideoStream = false;
+
+				switchStreamsMutex.unlock();
+			}
+			catch (...)
+			{
+				isSwitchingVideoStream = false;
+				if (isMutexGuardLocked)
+				{
+					mutexGuard.unlock();
+				}
+				switchStreamsMutex.unlock();
+				throw;
+			}
+
+		});
+}
+
+void FFmpegInteropMSS::OnSampleProcessed(Windows::Media::Core::MediaStreamSample^ sender, Platform::Object^ args)
+{
+	mutexGuard.lock();
+	lastRenderPosition = sender->Timestamp;
 	mutexGuard.unlock();
 }
 
@@ -1729,5 +1856,3 @@ static int64_t FileStreamSeek(void* ptr, int64_t pos, int whence)
 		return out.QuadPart; // Return the new position:
 	}
 }
-
-

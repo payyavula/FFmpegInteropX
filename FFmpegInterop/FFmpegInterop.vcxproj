@@ -131,6 +131,7 @@
     <ClInclude Include="SubtitleProvider.h" />
     <ClInclude Include="SubtitleProviderBitmap.h" />
     <ClInclude Include="SubtitleProviderSsaAss.h" />
+    <ClInclude Include="TaskHelpers.h" />
     <ClInclude Include="TimeSpanHelpers.h" />
     <ClInclude Include="MediaMetadata.h" />
     <ClInclude Include="UncompressedAudioSampleProvider.h" />
@@ -157,6 +158,7 @@
     <ClCompile Include="HEVCSampleProvider.cpp" />
     <ClCompile Include="MediaSampleProvider.cpp" />
     <ClCompile Include="NativeBufferFactory.cpp" />
+    <ClCompile Include="TaskHelpers.cpp" />
     <ClCompile Include="UncompressedAudioSampleProvider.cpp" />
     <ClCompile Include="UncompressedSampleProvider.cpp" />
     <ClCompile Include="UncompressedVideoSampleProvider.cpp" />

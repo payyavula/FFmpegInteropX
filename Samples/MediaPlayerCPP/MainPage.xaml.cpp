@@ -163,7 +163,7 @@ void MainPage::URIBoxKeyUp(Platform::Object^ sender, Windows::UI::Xaml::Input::K
 
 		// Below are some sample options that you can set to configure RTSP streaming
 		// Config->FFmpegOptions->Insert("rtsp_flags", "prefer_tcp");
-		// Config->FFmpegOptions->Insert("stimeout", 100000);
+		//Config->FFmpegOptions->Insert("probesize", "1024");
 
 		// Instantiate FFmpegInteropMSS using the URI
 		mediaElement->Stop();
@@ -454,8 +454,13 @@ void MediaPlayerCPP::MainPage::OnKeyDown(Platform::Object ^sender, Windows::UI::
 	{
 		if (playbackItem && playbackItem->VideoTracks->Size > 1)
 		{
-			playbackItem->VideoTracks->SelectedIndex = 
-				(playbackItem->VideoTracks->SelectedIndex + 1) % playbackItem->VideoTracks->Size;
+			unsigned int index;
+			FFmpegMSS->VideoStreams->IndexOf(FFmpegMSS->CurrentVideoStream, &index);
+			auto stream = FFmpegMSS->VideoStreams->GetAt((index + 1) % FFmpegMSS->VideoStreams->Size);
+			FFmpegMSS->SelectVideoStreamAsync(stream);
+			//FFmpegMSS->SelectVideoStreamAsync()
+			/*playbackItem->VideoTracks->SelectedIndex = 
+				(playbackItem->VideoTracks->SelectedIndex + 1) % playbackItem->VideoTracks->Size;*/
 		}
 	}
 }

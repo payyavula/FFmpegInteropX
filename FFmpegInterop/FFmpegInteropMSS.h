@@ -128,6 +128,9 @@ namespace FFmpegInterop
 			return AddExternalSubtitleAsync(stream, config->DefaultExternalSubtitleStreamName);
 		}
 
+		///<summary>Adds an external subtitle from a stream.</summary>
+		IAsyncAction^ SelectVideoStreamAsync(VideoStreamInfo^ videoStream);
+
 		///<summary>Destroys the FFmpegInteropMSS instance and releases all resources.</summary>
 		virtual ~FFmpegInteropMSS();
 
@@ -191,6 +194,38 @@ namespace FFmpegInterop
 		property IVectorView<ChapterInfo^>^ ChapterInfos
 		{
 			IVectorView<ChapterInfo^>^ get() { return chapterInfos; }
+		}
+
+		///<summary>Gets the currently selected video stream.</summary>
+		property VideoStreamInfo^ CurrentVideoStream
+		{
+			VideoStreamInfo^ get()
+			{
+				for (int i = 0; i < videoStreams.size(); i++)
+				{
+					if (videoStreams.at(i) == currentVideoStream)
+					{
+						return videoStreamInfos->GetAt(i);
+					}
+				}
+				return nullptr;
+			}
+		}
+
+		///<summary>Gets the currently selected audio stream.</summary>
+		property AudioStreamInfo^ CurrentAudioStream
+		{
+			AudioStreamInfo^ get()
+			{
+				for (int i = 0; i < audioStreams.size(); i++)
+				{
+					if (audioStreams.at(i) == currentAudioStream)
+					{
+						return audioStreamInfos->GetAt(i);
+					}
+				}
+				return nullptr;
+			}
 		}
 
 		///<summary>Gets a boolean indication if a thumbnail is embedded in the file.</summary>
@@ -279,6 +314,8 @@ namespace FFmpegInterop
 		void OnPresentationModeChanged(MediaPlaybackTimedMetadataTrackList^ sender, TimedMetadataPresentationModeChangedEventArgs^ args);
 		void InitializePlaybackItem(MediaPlaybackItem^ playbackitem);
 		bool CheckUseHardwareAcceleration(AVCodecContext* avCodecCtx, HardwareAccelerationStatus^ status, HardwareDecoderStatus& hardwareDecoderStatus, bool manualStatus, int maxProfile, int maxLevel);
+		bool IsNearCurrentPlaybackPosition(TimeSpan position);
+		void OnSampleProcessed(Windows::Media::Core::MediaStreamSample^ sender, Platform::Object^ args);
 
 	internal:
 		static FFmpegInteropMSS^ CreateFromStream(IRandomAccessStream^ stream, FFmpegInteropConfig^ config, MediaStreamSource^ mss, CoreDispatcher^ dispatcher);
@@ -345,8 +382,14 @@ namespace FFmpegInterop
 		TimeSpan subtitleDelay;
 		unsigned char* fileStreamBuffer;
 		bool isFirstSeek;
+		bool isSwitchingVideoStream;
+		bool isFirstSeekAfterSwitchingVideoStream;
+		task_completion_event<void> switchVideoStreamEvent;
+		task_completion_event<void> firstSampleAfterSwitchVideoStreamEvent;
+		std::recursive_mutex switchStreamsMutex;
+		TimeSpan lastRenderPosition;
 
 		static CoreDispatcher^ GetCurrentDispatcher();
-	};
+};
 
 }

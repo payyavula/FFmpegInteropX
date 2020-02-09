@@ -64,6 +64,9 @@
     <ClCompile Include="BasicVideoEffect.cpp">
       <Filter>Effects</Filter>
     </ClCompile>
+    <ClCompile Include="TaskHelpers.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -176,6 +179,9 @@
     </ClInclude>
     <ClInclude Include="Enumerations.h" />
     <ClInclude Include="CodecRequiredEventArgs.h" />
+    <ClInclude Include="TaskHelpers.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\BuildFFmpeg_VS2017.bat">
