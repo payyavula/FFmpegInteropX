@@ -14,11 +14,11 @@ if [ "$1" == "Win10" ]; then
         ../../../configure \
         --toolchain=msvc \
         --disable-programs \
-        --disable-d3d11va \
+        --enable-d3d11va \
         --disable-dxva2 \
 		--disable-encoders \
 		--disable-devices \
-		--disable-hwaccels \
+		--enable-hwaccels \
         --disable-doc \
         --arch=x86 \
         --enable-shared \
@@ -48,11 +48,11 @@ if [ "$1" == "Win10" ]; then
         ../../../configure \
         --toolchain=msvc \
         --disable-programs \
-        --disable-d3d11va \
+        --enable-d3d11va \
         --disable-dxva2 \
 		--disable-encoders \
 		--disable-devices \
-		--disable-hwaccels \
+		--enable-hwaccels \
         --disable-doc \
         --arch=x86_64 \
         --enable-shared \
@@ -82,11 +82,11 @@ if [ "$1" == "Win10" ]; then
         ../../../configure \
         --toolchain=msvc \
         --disable-programs \
-        --disable-d3d11va \
+        --enable-d3d11va \
         --disable-dxva2 \
 		--disable-encoders \
 		--disable-devices \
-		--disable-hwaccels \
+		--enable-hwaccels \
         --disable-doc \
         --arch=arm \
         --as=armasm \
@@ -118,11 +118,11 @@ if [ "$1" == "Win10" ]; then
         ../../../configure \
         --toolchain=msvc \
         --disable-programs \
-        --disable-d3d11va \
+        --enable-d3d11va \
         --disable-dxva2 \
 		--disable-encoders \
 		--disable-devices \
-		--disable-hwaccels \
+		--enable-hwaccels \
         --disable-doc \
         --arch=arm64 \
         --as=armasm64 \
@@ -158,7 +158,7 @@ elif [ "$1" == "Win8.1" ]; then
         ../../../configure \
         --toolchain=msvc \
         --disable-programs \
-        --disable-d3d11va \
+        --enable-d3d11va \
         --disable-dxva2 \
         --disable-doc \
         --arch=x86 \
